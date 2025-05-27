@@ -1,8 +1,8 @@
 package com.maximedyma.tennis.service;
 
-import com.maximedyma.tennis.Player;
 import com.maximedyma.tennis.data.PlayerEntityList;
 import com.maximedyma.tennis.data.PlayerRepository;
+import com.maximedyma.tennis.model.Player;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class PlayerServiceTest {
     private PlayerService playerService;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         playerService = new PlayerService(playerRepository);
     }
@@ -71,12 +71,12 @@ public class PlayerServiceTest {
     @Test
     public void shouldFailToRetrievePlayer_WhenPlayerDoesNotExist() {
         // Given
-        String unknowPlayer = "doe";
-        Mockito.when(playerRepository.findOneByLastNameIgnoreCase(unknowPlayer)).thenReturn(Optional.empty());
+        String unknownPlayer = "doe";
+        Mockito.when(playerRepository.findOneByLastNameIgnoreCase(unknownPlayer)).thenReturn(Optional.empty());
 
         // When / Then
         Exception exception = assertThrows(PlayerNotFoundException.class, () -> {
-            playerService.getByLastName(unknowPlayer);
+            playerService.getByLastName(unknownPlayer);
         });
         Assertions.assertThat(exception.getMessage()).isEqualTo("Player with last name doe could not be found.");
     }

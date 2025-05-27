@@ -1,4 +1,4 @@
-package com.maximedyma.tennis;
+package com.maximedyma.tennis.model;
 
 import jakarta.validation.constraints.NotBlank;
 

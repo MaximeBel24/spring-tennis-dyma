@@ -1,13 +1,14 @@
 package com.maximedyma.tennis.service;
 
-import com.maximedyma.tennis.Player;
-import com.maximedyma.tennis.PlayerToSave;
+import com.maximedyma.tennis.model.Player;
+import com.maximedyma.tennis.model.PlayerToSave;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
+import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -16,11 +17,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class PlayerServiceIntegrationTest {
 
     @Autowired
     private PlayerService playerService;
+
+    @BeforeEach
+    void clearDatabase(@Autowired Flyway flyway) {
+        System.out.println("Flyway clean + migrate");
+        flyway.clean();
+        flyway.repair();
+        flyway.migrate();
+    }
 
     @Test
     public void shouldCreatePlayer() {
@@ -34,14 +42,14 @@ public class PlayerServiceIntegrationTest {
 
         // When
         playerService.create(playerToSave);
-        Player creaatedPlayer = playerService.getByLastName("doe");
+        Player createdPlayer = playerService.getByLastName("doe");
 
         // Then
-        Assertions.assertThat(creaatedPlayer.firstName()).isEqualTo("John");
-        Assertions.assertThat(creaatedPlayer.lastName()).isEqualTo("Doe");
-        Assertions.assertThat(creaatedPlayer.birthDate()).isEqualTo(LocalDate.of(2000, Month.JANUARY, 1));
-        Assertions.assertThat(creaatedPlayer.rank().points()).isEqualTo(10000);
-        Assertions.assertThat(creaatedPlayer.rank().position()).isEqualTo(1);
+        Assertions.assertThat(createdPlayer.firstName()).isEqualTo("John");
+        Assertions.assertThat(createdPlayer.lastName()).isEqualTo("Doe");
+        Assertions.assertThat(createdPlayer.birthDate()).isEqualTo(LocalDate.of(2000, Month.JANUARY, 1));
+        Assertions.assertThat(createdPlayer.rank().points()).isEqualTo(10000);
+        Assertions.assertThat(createdPlayer.rank().position()).isEqualTo(1);
     }
 
     @Test
@@ -69,7 +77,7 @@ public class PlayerServiceIntegrationTest {
 
         // When
         playerService.delete(playerToDelete);
-        List<Player> allPlayers =playerService.getAllPlayers();
+        List<Player> allPlayers = playerService.getAllPlayers();
 
         // Then
         Assertions.assertThat(allPlayers)

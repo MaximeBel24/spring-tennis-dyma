@@ -1,6 +1,6 @@
 package com.maximedyma.tennis.web;
 
-import com.maximedyma.tennis.UserCredentials;
+import com.maximedyma.tennis.model.UserCredentials;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

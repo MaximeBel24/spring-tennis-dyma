@@ -1,6 +1,6 @@
 package com.maximedyma.tennis.web;
 
-import com.maximedyma.tennis.Error;
+import com.maximedyma.tennis.model.Error;
 import com.maximedyma.tennis.service.PlayerAlreadyExistsException;
 import com.maximedyma.tennis.service.PlayerDataRetrievalException;
 import com.maximedyma.tennis.service.PlayerNotFoundException;

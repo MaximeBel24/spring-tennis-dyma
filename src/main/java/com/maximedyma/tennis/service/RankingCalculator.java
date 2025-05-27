@@ -1,13 +1,8 @@
 package com.maximedyma.tennis.service;
 
-import com.maximedyma.tennis.Player;
-import com.maximedyma.tennis.PlayerList;
-import com.maximedyma.tennis.PlayerToSave;
-import com.maximedyma.tennis.Rank;
 import com.maximedyma.tennis.data.PlayerEntity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class RankingCalculator {

@@ -1,8 +1,8 @@
 package com.maximedyma.tennis.web;
 
-import com.maximedyma.tennis.Error;
-import com.maximedyma.tennis.Player;
-import com.maximedyma.tennis.PlayerToSave;
+import com.maximedyma.tennis.model.Error;
+import com.maximedyma.tennis.model.Player;
+import com.maximedyma.tennis.model.PlayerToSave;
 import com.maximedyma.tennis.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

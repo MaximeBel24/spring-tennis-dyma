@@ -1,6 +1,6 @@
 package com.maximedyma.tennis.web;
 
-import com.maximedyma.tennis.PlayerList;
+import com.maximedyma.tennis.data.PlayerList;
 import com.maximedyma.tennis.service.PlayerNotFoundException;
 import com.maximedyma.tennis.service.PlayerService;
 import org.hamcrest.CoreMatchers;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -22,12 +22,11 @@ public class PlayerControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private PlayerService playerService;
 
     @Test
     public void shouldListAllPlayers() throws Exception {
-
         // Given
         Mockito.when(playerService.getAllPlayers()).thenReturn(PlayerList.ALL);
 

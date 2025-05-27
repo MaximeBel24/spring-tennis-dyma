@@ -44,10 +44,10 @@ public class SecurityConfiguration {
                 .headers(headers ->
                         headers
                                 .contentSecurityPolicy(csp ->
-                                    csp.policyDirectives("default-src 'self' data:; style-src 'self' 'unsafe-inline';")
+                                    csp.policyDirectives("default-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';")
                                 )
                                 .frameOptions(frameOptionsConfig -> frameOptionsConfig.deny())
-                                .permissionsPolicy(permissionsPolicyConfig -> permissionsPolicyConfig.policy(
+                                .permissionsPolicyHeader(permissionsPolicyConfig -> permissionsPolicyConfig.policy(
                                         "fullscreen=(self), geolocation=(), microphone=(), camera=()"
                                 ))
                 )
@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/accounts/login").permitAll()
                                 .requestMatchers("/healthcheck").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/players/**").hasAuthority("ROLE_USER")
                                 .requestMatchers(HttpMethod.POST, "/players/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/players/**").hasAuthority("ROLE_ADMIN")
@@ -65,5 +66,6 @@ public class SecurityConfiguration {
                 );
         return http.build();
     }
+
 
 }

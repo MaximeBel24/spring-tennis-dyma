@@ -1,4 +1,5 @@
-package com.maximedyma.tennis;
+package com.maximedyma.tennis.data;
+
 
 import com.maximedyma.tennis.model.Player;
 import com.maximedyma.tennis.model.Rank;

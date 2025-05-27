@@ -1,9 +1,8 @@
 package com.maximedyma.tennis.service;
 
-import com.maximedyma.tennis.Player;
-import com.maximedyma.tennis.PlayerList;
-import com.maximedyma.tennis.PlayerToSave;
-import com.maximedyma.tennis.Rank;
+import com.maximedyma.tennis.model.Player;
+import com.maximedyma.tennis.model.PlayerToSave;
+import com.maximedyma.tennis.model.Rank;
 import com.maximedyma.tennis.data.PlayerEntity;
 import com.maximedyma.tennis.data.PlayerRepository;
 import org.slf4j.Logger;
