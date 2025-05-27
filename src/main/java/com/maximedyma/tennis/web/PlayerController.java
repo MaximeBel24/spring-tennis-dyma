@@ -1,8 +1,8 @@
 package com.maximedyma.tennis.web;
 
-import com.maximedyma.tennis.model.Error;
 import com.maximedyma.tennis.model.Player;
-import com.maximedyma.tennis.model.PlayerToSave;
+import com.maximedyma.tennis.model.PlayerToCreate;
+import com.maximedyma.tennis.model.PlayerToUpdate;
 import com.maximedyma.tennis.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "Tennis Players API")
 @RestController
@@ -42,14 +43,14 @@ public class PlayerController {
             @ApiResponse(responseCode = "200", description = "Player",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Player.class))}),
-            @ApiResponse(responseCode = "404", description = "A player with the specified last name was not found",
+            @ApiResponse(responseCode = "404", description = "A player with specified identifier was not found",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Error.class))}),
             @ApiResponse(responseCode = "403", description = "This user is not authorized to perform this action.")
     })
-    @GetMapping("{lastName}")
-    public Player getByLastName(@PathVariable("lastName") String lastName) {
-        return playerService.getByLastName(lastName);
+    @GetMapping("{identifier}")
+    public Player getPlayer(@PathVariable("identifier") UUID identifier) {
+        return playerService.getByIdentifier(identifier);
     }
 
     @Operation(summary = "Creates a player", description = "Creates a player")
@@ -57,14 +58,14 @@ public class PlayerController {
             @ApiResponse(responseCode = "200", description = "Created player",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Player.class))}),
-            @ApiResponse(responseCode = "400", description = "Player with specified last name already exists.",
+            @ApiResponse(responseCode = "400", description = "Player already exists.",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Error.class))}),
             @ApiResponse(responseCode = "403", description = "This user is not authorized to perform this action.")
     })
     @PostMapping
-    public Player createPlayer(@Valid @RequestBody PlayerToSave playerToRegister) {
-        return playerService.create(playerToRegister);
+    public Player createPlayer(@Valid @RequestBody PlayerToCreate playerToCreate) {
+        return playerService.create(playerToCreate);
     }
 
     @Operation(summary = "Updates a player", description = "Updates a player")
@@ -72,26 +73,26 @@ public class PlayerController {
             @ApiResponse(responseCode = "200", description = "Updated player",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Player.class))}),
-            @ApiResponse(responseCode = "404", description = "Player with specified last name was not found.",
+            @ApiResponse(responseCode = "404", description = "Player with specified identifier was not found.",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Error.class))}),
             @ApiResponse(responseCode = "403", description = "This user is not authorized to perform this action.")
     })
     @PutMapping
-    public Player updatePlayer(@Valid @RequestBody PlayerToSave playerToSave) {
-        return playerService.update(playerToSave);
+    public Player updatePlayer(@Valid @RequestBody PlayerToUpdate playerToUpdate) {
+        return playerService.update(playerToUpdate);
     }
 
     @Operation(summary = "Deletes a player", description = "Deletes a player")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Player has been deleted"),
-            @ApiResponse(responseCode = "404", description = "Player with specified last name was not found.",
+            @ApiResponse(responseCode = "404", description = "Player with specified identifier was not found.",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Error.class))}),
             @ApiResponse(responseCode = "403", description = "This user is not authorized to perform this action.")
     })
-    @DeleteMapping("{lastName}")
-    public void deletePlayerByLastName(@PathVariable("lastName") String lastName) {
-        playerService.delete(lastName);
+    @DeleteMapping("{identifier}")
+    public void deletePlayerByLastName(@PathVariable("identifier") UUID identifier) {
+        playerService.delete(identifier);
     }
 }
