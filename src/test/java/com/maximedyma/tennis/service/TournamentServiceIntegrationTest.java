@@ -42,10 +42,10 @@ public class TournamentServiceIntegrationTest {
 
         // When
         Tournament savedTournament = tournamentService.create(tournamentToCreate);
-        Tournament createdTournament = tournamentService.getByIdentifier(savedTournament.identifier());
+        Tournament createdTournament = tournamentService.getByIdentifier(savedTournament.info().identifier());
 
         // Then
-        Assertions.assertThat(createdTournament.name()).isEqualTo("Madrid Master 1000");
+        Assertions.assertThat(createdTournament.info().name()).isEqualTo("Madrid Master 1000");
     }
 
     @Test
@@ -92,7 +92,7 @@ public class TournamentServiceIntegrationTest {
         Tournament updatedTournament = tournamentService.getByIdentifier(frenchOpenIdentifier);
 
         // Then
-        Assertions.assertThat(updatedTournament.name()).isEqualTo("Roland Garros");
+        Assertions.assertThat(updatedTournament.info().name()).isEqualTo("Roland Garros");
     }
 
     @Test
@@ -106,7 +106,7 @@ public class TournamentServiceIntegrationTest {
         // Then
         List<Tournament> allTournaments = tournamentService.getAllTournaments();
         Assertions.assertThat(allTournaments)
-                .extracting("name")
+                .extracting("info.name")
                 .containsExactly("Australian Open", "French Open", "Wimbledon");
     }
 

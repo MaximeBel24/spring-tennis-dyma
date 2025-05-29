@@ -1,18 +1,16 @@
 package com.maximedyma.tennis.model;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 public record Tournament(
-        @NotNull(message = "Identifier is mandatory") UUID identifier,
-        @NotBlank(message = "Name is mandatory") String name,
-        @NotNull(message = "Start date is mandatory") LocalDate startDate,
-        @NotNull(message = "End date is mandatory") LocalDate endDateDate,
-        @Positive(message = "Prize money must be positive") Integer prizeMoney,
-        @NotNull(message = "Capacity is mandatory") @Positive(message = "Capacity must be positive") Integer capacity
+        @Valid TournamentDescription info,
+        @Valid Set<PlayerDescription> players
 ) {
 }

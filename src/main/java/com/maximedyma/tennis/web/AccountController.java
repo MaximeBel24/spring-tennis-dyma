@@ -1,6 +1,8 @@
 package com.maximedyma.tennis.web;
 
+import com.maximedyma.tennis.model.UserAuthentication;
 import com.maximedyma.tennis.model.UserCredentials;
+import com.maximedyma.tennis.security.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -9,6 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -25,7 +30,10 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     @Autowired
-    private AuthenticationManagerBuilder authenticationManagerBuilder;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
@@ -38,12 +46,15 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Login or password is not provided.")
     })
     @PostMapping("/login")
-    public void login(@RequestBody @Valid UserCredentials credentials, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserAuthentication> login(@RequestBody @Valid UserCredentials credentials, HttpServletRequest request, HttpServletResponse response) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentials.login(), credentials.password());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authentication);
-        securityContextRepository.saveContext(securityContext, request, response);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        String jwt = jwtService.createToken(authentication);
+        return new ResponseEntity<>(
+                new UserAuthentication(authentication.getName(), jwt),
+                HttpStatus.OK
+        );
     }
 
     @Operation(summary = "Logs off authenticated user", description = "Logs off authenticated user")

@@ -1,6 +1,7 @@
 package com.maximedyma.tennis.web;
 
 import com.maximedyma.tennis.data.TournamentList;
+import com.maximedyma.tennis.service.RegistrationService;
 import com.maximedyma.tennis.service.TournamentNotFoundException;
 import com.maximedyma.tennis.service.TournamentService;
 import org.hamcrest.CoreMatchers;
@@ -27,6 +28,9 @@ public class TournamentControllerTest {
     @MockitoBean
     private TournamentService tournamentService;
 
+    @MockitoBean
+    private RegistrationService registrationService;
+
     @Test
     public void shouldListAllTournaments() throws Exception {
         // Given
@@ -36,10 +40,10 @@ public class TournamentControllerTest {
         mockMvc.perform(get("/tournaments"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)))
-                .andExpect(jsonPath("$[0].name", CoreMatchers.is("Australian Open")))
-                .andExpect(jsonPath("$[1].name", CoreMatchers.is("French Open")))
-                .andExpect(jsonPath("$[2].name", CoreMatchers.is("Wimbledon")))
-                .andExpect(jsonPath("$[3].name", CoreMatchers.is("US Open")));
+                .andExpect(jsonPath("$[0].info.name", CoreMatchers.is("Australian Open")))
+                .andExpect(jsonPath("$[1].info.name", CoreMatchers.is("French Open")))
+                .andExpect(jsonPath("$[2].info.name", CoreMatchers.is("Wimbledon")))
+                .andExpect(jsonPath("$[3].info.name", CoreMatchers.is("US Open")));
     }
 
     @Test
@@ -51,7 +55,7 @@ public class TournamentControllerTest {
         // When / Then
         mockMvc.perform(get("/tournaments/a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", CoreMatchers.is("French Open")));
+                .andExpect(jsonPath("$.info.name", CoreMatchers.is("French Open")));
     }
 
     @Test

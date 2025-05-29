@@ -3,6 +3,9 @@ package com.maximedyma.tennis.data;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -32,6 +35,14 @@ public class PlayerEntity {
     @Column(name = "rank", nullable = false)
     private Integer rank;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "player_tournament",
+            joinColumns = {@JoinColumn(name = "player_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "tournament_id", referencedColumnName = "id")}
+    )
+    private Set<TournamentEntity> tournaments = new HashSet<>();
+
     public PlayerEntity() {
     }
 
@@ -52,6 +63,14 @@ public class PlayerEntity {
         this.birthDate = birthDate;
         this.points = points;
         this.rank = rank;
+    }
+
+    public void addTournament(TournamentEntity tournament) {
+        this.tournaments.add(tournament);
+    }
+
+    public Set<TournamentEntity> getTournaments() {
+        return tournaments;
     }
 
     public Long getId() {
@@ -96,5 +115,17 @@ public class PlayerEntity {
 
     public void setRank(Integer rank) {
         this.rank = rank;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerEntity that = (PlayerEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

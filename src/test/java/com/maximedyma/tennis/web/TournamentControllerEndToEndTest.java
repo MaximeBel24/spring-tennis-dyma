@@ -56,7 +56,7 @@ public class TournamentControllerEndToEndTest {
         ResponseEntity<Tournament> tournamentResponseEntity = this.restTemplate.exchange(url, HttpMethod.POST, request, Tournament.class);
 
         // Then
-        Assertions.assertThat(tournamentResponseEntity.getBody().name()).isEqualTo("Madrid Master 1000");
+        Assertions.assertThat(tournamentResponseEntity.getBody().info().name()).isEqualTo("Madrid Master 1000");
     }
 
     @Test
@@ -97,7 +97,7 @@ public class TournamentControllerEndToEndTest {
         ResponseEntity<Tournament> tournamentResponseEntity = this.restTemplate.exchange(url, HttpMethod.PUT, request, Tournament.class);
 
         // Then
-        Assertions.assertThat(tournamentResponseEntity.getBody().name()).isEqualTo("Roland Garros");
+        Assertions.assertThat(tournamentResponseEntity.getBody().info().name()).isEqualTo("Roland Garros");
     }
 
     @Test
@@ -115,7 +115,7 @@ public class TournamentControllerEndToEndTest {
 
         // Then
         Assertions.assertThat(allTournamentsResponseEntity.getBody())
-                .extracting("name")
+                .extracting("info.name")
                 .containsExactly("Australian Open", "French Open", "Wimbledon", "US Open");
     }
 }

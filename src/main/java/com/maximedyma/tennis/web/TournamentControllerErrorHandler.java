@@ -3,6 +3,7 @@ package com.maximedyma.tennis.web;
 import com.maximedyma.tennis.service.TournamentAlreadyExistsException;
 import com.maximedyma.tennis.service.TournamentDataRetrievalException;
 import com.maximedyma.tennis.service.TournamentNotFoundException;
+import com.maximedyma.tennis.service.TournamentRegistrationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,12 @@ public class TournamentControllerErrorHandler {
     @ExceptionHandler(TournamentDataRetrievalException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Error handleTournamentDataRetrievalException(TournamentDataRetrievalException ex) {
+        return new Error(ex.getMessage());
+    }
+
+    @ExceptionHandler(TournamentRegistrationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Error handleTournamentRegistrationException(TournamentRegistrationException ex) {
         return new Error(ex.getMessage());
     }
 }

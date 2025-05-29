@@ -3,6 +3,9 @@ package com.maximedyma.tennis.data;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +34,9 @@ public class TournamentEntity {
     @Column(name = "capacity", nullable = false)
     private Integer capacity;
 
+    @ManyToMany(mappedBy = "tournaments", fetch = FetchType.EAGER)
+    private Set<PlayerEntity> players = new HashSet<>();
+
     public TournamentEntity() {
 
     }
@@ -42,6 +48,14 @@ public class TournamentEntity {
         this.endDate = endDate;
         this.prizeMoney = prizeMoney;
         this.capacity = capacity;
+    }
+
+    public boolean isFull() {
+        return capacity == players.size() - 1;
+    }
+
+    public boolean hasPlayer(PlayerEntity playerToRegister) {
+        return players.contains(playerToRegister);
     }
 
     public Long getId() {
@@ -95,4 +109,13 @@ public class TournamentEntity {
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
+
+    public Set<PlayerEntity> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<PlayerEntity> players) {
+        this.players = players;
+    }
+
 }

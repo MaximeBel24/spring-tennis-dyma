@@ -24,22 +24,19 @@ public class TournamentService {
     @Autowired
     private final TournamentRepository tournamentRepository;
 
-    public TournamentService(TournamentRepository tournamentRepository) {
+    @Autowired
+    private final TournamentMapper tournamentMapper;
+
+    public TournamentService(TournamentRepository tournamentRepository, TournamentMapper tournamentMapper) {
         this.tournamentRepository = tournamentRepository;
+        this.tournamentMapper = tournamentMapper;
     }
 
     public List<Tournament> getAllTournaments() {
-        log.info("Invoking getAllTournament()");
+        log.info("Invoking getAllTournaments()");
         try {
             return tournamentRepository.findAll().stream()
-                    .map(tournament -> new Tournament(
-                            tournament.getIdentifier(),
-                            tournament.getName(),
-                            tournament.getStartDate(),
-                            tournament.getEndDate(),
-                            tournament.getPrizeMoney(),
-                            tournament.getCapacity())
-                    )
+                    .map(tournamentMapper::tournamentEntityToTournament)
                     .collect(Collectors.toList());
         } catch (DataAccessException e) {
             log.error("Could not retrieve tournaments", e);
@@ -55,14 +52,7 @@ public class TournamentService {
                 log.warn("Could not find tournament with identifier={}", identifier);
                 throw new TournamentNotFoundException(identifier);
             }
-            return new Tournament(
-                    tournament.get().getIdentifier(),
-                    tournament.get().getName(),
-                    tournament.get().getStartDate(),
-                    tournament.get().getEndDate(),
-                    tournament.get().getPrizeMoney(),
-                    tournament.get().getCapacity()
-            );
+            return tournamentMapper.tournamentEntityToTournament(tournament.get());
         } catch (DataAccessException e) {
             log.error("Could not find tournament with identifier={}", identifier, e);
             throw new TournamentDataRetrievalException(e);
